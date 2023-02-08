@@ -10,12 +10,22 @@ PODCAST_URL = "https://www.marketplace.org/feed/podcast/marketplace/"
 @dag(
     dag_id='podcast_summary',
     schedule_interval="@daily",
-    start_date=pendulum.datetime(2022, 5, 30),
+    start_date=pendulum.datetime(2023, 12, 30),
     catchup=False,
 )
 def podcast_summary():
     create_database = SqliteOperator(
         task_id='create_table_sqlite',
+        sql=r"""
+        CREATE TABLE IF NOT EXISTS episodes (
+            link TEXT PRIMARY KEY,
+            title TEXT,
+            filename TEXT,
+            published TEXT,
+            description TEXT,
+            transcript TEXT
+        );
+        """,
         sqlite_conn_id="podcasts"
     )
 
