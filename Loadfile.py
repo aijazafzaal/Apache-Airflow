@@ -17,6 +17,16 @@ PODCAST_URL = "https://www.marketplace.org/feed/podcast/marketplace/"
 def podcast_summary():
     create_database = SqliteOperator(
         task_id='create_table_sqlite',
+        sql=r"""
+        CREATE TABLE IF NOT EXISTS episodes (
+            link TEXT PRIMARY KEY,
+            title TEXT,
+            filename TEXT,
+            published TEXT,
+            description TEXT,
+            transcript TEXT
+        );
+        """,
         sqlite_conn_id="podcasts"
     )
 
@@ -31,18 +41,4 @@ def podcast_summary():
     podcast_episodes = get_episodes()
     create_database.set_downstream(podcast_episodes)
 
-    @task()
-    def load_episodes(episodes):
-        hook = SqliteHook(sqlite_conn_id="podcasts")
-        stored_episodes = hook.get_pandas_df("SELECT * from episodes;")
-        new_episodes = []
-        for episode in episodes:
-            if episode["link"] not in stored_episodes["link"].values:
-                filename = f"{episode['link'].split('/')[-1]}.mp3"
-                new_episodes.append([episode["link"], episode["title"], episode["pubDate"], episode["description"], filename])
-
-        hook.insert_rows(table='episodes', rows=new_episodes, target_fields=["link", "title", "published", "description", "filename"])
-
-    load_episodes(podcast_episodes)
-
-summary = podcast_summary()
+ 
