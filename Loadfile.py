@@ -11,7 +11,7 @@ PODCAST_URL = "https://www.marketplace.org/feed/podcast/marketplace/"
 @dag(
     dag_id='podcast_summary',
     schedule_interval="@daily",
-    start_date=pendulum.datetime(2022, 5, 30),
+    start_date=pendulum.datetime(2022, 12, 30),
     catchup=False,
 )
 def podcast_summary():
