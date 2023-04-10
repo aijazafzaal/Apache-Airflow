@@ -3,4 +3,6 @@ STEPS:
 1. Designed a customized table schema for data management using SQLite
 2. Extracted podcast metadata to obtain information on each podcast episode
 3. Utilized the extracted metadata to download the actual podcast episodes
-4. Stored the downloaded podcast episodes in a SQLite database
+4. Stored the downloaded podcast episodes in a SQLite database  
+
+Data extracted from: https://www.marketplace.org/feed/podcast/marketplace/
